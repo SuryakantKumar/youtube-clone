@@ -1,5 +1,5 @@
 from datetime import datetime
-from youtube import db
+from app import db
 
 
 class User(db.Model):
