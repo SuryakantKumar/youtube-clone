@@ -1,0 +1,12 @@
+<html>
+    <head>
+        {% if title %}
+            <title> {{ title }} - YouTube</title>
+        {% else %}
+            <title>Welcome to YouTube</title>
+        {% endif %}
+    </head>
+    <body>
+        {% block content %}{% endblock%}
+    </body>
+</html>
