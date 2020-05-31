@@ -1,7 +1,7 @@
 from app.models import User
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, TextField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 
@@ -40,7 +40,7 @@ class UpdateAccountForm(FlaskForm):
     user_name = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     avatar = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-    submit = SubmitField('Sign Up')
+    submit = SubmitField('Update')
 
     def validate_username(self, user_name):
         '''Validation if the username entered is already present or not'''
@@ -57,3 +57,10 @@ class UpdateAccountForm(FlaskForm):
             if user is not None:
                 raise ValidationError('Please use a different email address.')
     
+
+class VideoUploadForm(FlaskForm):
+    video_title = TextField('Title', validators=[DataRequired(), Length(max=60)])
+    description = TextField('Description', validators=[DataRequired()])
+    category = StringField('Category', validators=[DataRequired(), Length(max=20)])
+    video_content = FileField('Video', validators=[FileAllowed(['mp4', 'mkv', '3gp', 'mov']), FileRequired()])
+    submit = SubmitField('Upload')

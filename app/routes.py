@@ -2,7 +2,7 @@ import os
 import secrets
 from PIL import Image
 from app import app, db
-from app.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, VideoUploadForm
 from app.models import User, Video
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import login_user, current_user, logout_user, login_required
@@ -12,8 +12,8 @@ from werkzeug.urls import url_parse
 @app.route('/home')
 def home():
     """Home Page view"""
-
-    return render_template('home.html', title='Home')
+    videos = Video.query.all()
+    return render_template('home.html', title='Home', videos=videos)
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -55,9 +55,16 @@ def login():
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+
+@app.route("/video/<int:id>")
+def video(id):
+    video = Video.query.get_or_404(id)
+    return render_template('video.html', title=video.video_title, video=video)
 
 
 def save_avatar(form_picture):
@@ -79,6 +86,8 @@ def save_avatar(form_picture):
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
+    """View for Profile Page"""
+
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.avatar.data:
@@ -93,5 +102,36 @@ def account():
         form.user_name.data = current_user.user_name
         form.email.data = current_user.email
     avatar = url_for('static', filename='avatar/' + current_user.avatar)
-    return render_template('account.html', title='Account', form=form, avatar=avatar)
+    return render_template('account.html', title='Account', form=form, avatar=avatar, videos=current_user.videos)
 
+
+def save_video(form_video):
+    '''Function to save video into static/videos directory'''
+
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_video.filename)
+    video_fn = random_hex + f_ext
+    video_path = os.path.join(app.root_path, 'static/videos', video_fn)
+
+    form_video.save(video_path)
+
+    return video_fn
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+@login_required
+def upload():
+    """Video Upload Page view"""
+    
+    form = VideoUploadForm()
+
+    if form.validate_on_submit():
+        video_file = save_video(form.video_content.data)
+        video = Video(video_title=form.video_title.data, video_content=video_file,
+            description=form.description.data, category=form.category.data, author=current_user)
+        db.session.add(video)
+        db.session.commit()
+        flash('Your Video has been posted!', 'success')
+        return redirect(url_for('home'))
+    
+    return render_template('upload.html', title='Upload Video', form=form)
