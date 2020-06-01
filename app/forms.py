@@ -64,3 +64,10 @@ class VideoUploadForm(FlaskForm):
     category = StringField('Category', validators=[DataRequired(), Length(max=20)])
     video_content = FileField('Video', validators=[FileAllowed(['mp4', 'mkv', '3gp', 'mov']), FileRequired()])
     submit = SubmitField('Upload')
+
+
+class UpdateVideoForm(FlaskForm):
+    video_title = TextField('Title', validators=[DataRequired(), Length(max=60)])
+    description = TextField('Description', validators=[DataRequired()])
+    category = StringField('Category', validators=[DataRequired(), Length(max=20)])
+    submit = SubmitField('Update')

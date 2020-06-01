@@ -54,16 +54,6 @@
             {% endif %}
           </div>
 
-          <div class="form-group">
-            {{ form.video_content.label() }}
-            {{ form.video_content(class="form-control-file") }}
-            {% if form.video_content.errors %}
-                {% for error in form.video_content.errors %}
-                    <span class="text-danger">{{ error }}</span></br>
-                {% endfor %}
-            {% endif %}
-        </div>
-
         <div class='form-group'>
           {{ form.submit(class='btn btn-outline-info') }}
         </div>

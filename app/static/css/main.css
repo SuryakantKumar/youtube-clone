@@ -122,6 +122,11 @@
     margin-bottom: 0px;
 }
 
+.video-view-user-name:hover{
+    text-decoration: none;
+    color: black;
+}
+
 .video-view-subscriber{
     font-family: Arial, Helvetica, sans-serif;
     color: grey;
@@ -210,6 +215,11 @@
     margin-left: 5%;
 }
 
+.home-video-title:hover{
+    text-decoration: none;
+    color: black;
+}
+
 .home-video-user-name{
     font-size: 1rem;
     font-family: Arial, Helvetica, sans-serif;
@@ -217,6 +227,11 @@
     color: grey;
     margin-top:0px;
     margin-left: 5%;
+}
+
+.home-video-user-name:hover{
+    text-decoration: none;
+    color: grey;
 }
 
 .home-video-tail-details{
@@ -269,12 +284,22 @@
     margin-top:0px;
 }
 
+.account-video-title:hover{
+    text-decoration: none;
+    color: black;
+}
+
 .account-video-user-name{
     font-size: 1rem;
     font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
     color: grey;
     margin-top:0px;
+}
+
+.account-video-user-name{
+    text-decoration: none;
+    color: grey;
 }
 
 .account-video-tail-details{
@@ -294,3 +319,38 @@
     font-size: 14px;
     margin-left: 10px;
 }
+
+/* ----------------------------Button----------------------------- */
+
+.button {
+    border: none;
+    color: white;
+    padding: 6px 14px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-right:0px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+  }
+  
+  .blue-button {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #008CBA;
+  }
+  
+  .blue-button:hover {
+    text-decoration: none;
+    background-color: #008CBA;
+    color: white;
+  }
+
+  .update-video-button{
+      margin-left: 900px;
+  }
+
+  .delete-video-button {
+      margin-left: 10px;
+  }

@@ -4,6 +4,7 @@
     </head>
 
     <body>
+        <!-- Video view page -->
         {% block content %}
             <div>
                 <video class="video-view" controls>
@@ -14,6 +15,16 @@
             <div class="video-view-tail-details">
                 <span class="video-view-views"> 286,000 views </span>
                 <span class="video-view-time">•{{ video.upload_time.strftime('%Y-%m-%d') }}</span>
+                {% if video.author == current_user %}
+                    <div>
+                        <span><a class="button blue-button update-video-button" href="{{ url_for('update_video', id=video.id) }}">
+                            Update
+                        </a></span>
+                        <span></span><a class="button blue-button delete-video-button" href="#">
+                            Delete
+                        </a></span>
+                    </div>
+                {% endif %}
             </div>
 
             <hr style="width: 1280px; margin-left: 2%;">

@@ -2,9 +2,9 @@ import os
 import secrets
 from PIL import Image
 from app import app, db
-from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, VideoUploadForm
+from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, VideoUploadForm, UpdateVideoForm
 from app.models import User, Video
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
@@ -134,4 +134,26 @@ def upload():
         flash('Your Video has been posted!', 'success')
         return redirect(url_for('home'))
     
-    return render_template('upload.html', title='Upload Video', form=form)
+    return render_template('upload.html', title='Upload Video', form=form, legend='Upload Your Video')
+
+
+@app.route('/video/<int:id>/update', methods=['GET', 'POST'])
+@login_required
+def update_video(id):
+    video = Video.query.get_or_404(id)
+    if video.author != current_user:
+        abort(403)
+
+    form = UpdateVideoForm()
+    if form.validate_on_submit():
+        video.video_title = form.video_title.data
+        video.description = form.description.data
+        video.category = form.category.data
+        db.session.commit()
+        flash('Your post has been updated!', 'success')
+        return redirect(url_for('video', id=video.id))
+    elif request.method == 'GET':
+        form.video_title.data = video.video_title
+        form.description.data = video.description
+        form.category.data = video.category
+    return render_template('update_video.html', title='Update Video', form=form, legend='Update video')
