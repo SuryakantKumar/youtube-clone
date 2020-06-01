@@ -1,22 +1,37 @@
-{% extends "layout.html" %}
+<html>
+    <head>
+        {% extends "layout.html" %}
+    </head>
 
-{% block content %}
-    {% for video in videos %}
-    <div style="display: flex; flex-direction:row; flex-wrap: wrap; width: 360px; ">
-        <article class="media content-section">
-            <img style="height: 65px; width: 65px; margin-right: 16px;" class="rounded-circle"
-                src="{{ url_for('static', filename='avatar/' + video.author.avatar) }}">
-            <div class="media-body">
-                <div class="article-metadata">
-                    <a class="mr-2" href="{{ url_for('account')}}">{{ video.author.user_name }}</a>
-                    <small class="text-muted">{{ video.upload_time.strftime('%Y-%m-%d') }}</small>
+    <body>
+        {% block content %}
+        <div class="home-page-videos">
+            {% for video in videos %}
+                <div class="home-video-box">
+                    <video class="home-video-view" controls>
+                        <source src="{{ url_for('static', filename='videos/' + video.video_content) }}" type="video/mp4">
+                    </video>
+
+                    <div class="home-video-image-title">
+                        <div class="home-video-user-image-box">
+                            <img src="{{ url_for('static', filename='avatar/' + video.author.avatar) }}" 
+                                alt="Avatar" class="home-video-user-image">
+                        </div>
+                            <div class="home-video-title-user">
+                                <a class="home-video-title" href="{{ url_for('video', id=video.id) }}">
+                                    {{ video.video_title }}
+                                </a>
+                                <br>
+                                <a class="home-video-user-name" href="{{ url_for('account')}}">{{ video.author.user_name }}</a>
+                            </div>
+                        </div>
+                    <div class="home-video-tail-details">
+                        <span class="home-video-views"> 286,000 views </span>
+                        <span class="home-video-time">•{{ video.upload_time.strftime('%Y-%m-%d') }}</span>
+                    </div>
                 </div>
-                <h5><a class="article-title" href="{{ url_for('video', id=video.id) }}">{{ video.video_title }}</a></h5>
-                <video width="360" height="200" controls>
-                    <source src="{{ url_for('static', filename='videos/' + video.video_content) }}" type="video/mp4">
-                </video>
-            </div>
-        </article>
-    </div>
-    {% endfor %}
-{% endblock content %}
+            {% endfor %}
+        </div>
+        {% endblock content %}
+    </body>
+</html>

@@ -1,85 +1,96 @@
-{% extends "layout.html" %}
+<html>
+    <head>
+        {% extends "layout.html" %}
+    </head>
 
-{% block content %}
-    <div style="width: 40%; margin-left: 30%; background: #ffffff; padding: 10px 20px; 
-        border: 1px solid #dddddd; border-radius: 3px; margin-bottom: 20px;">
-        <div class="media">
-            <img style="height: 125px; width: 125px; margin-right: 20px; margin-bottom: 16px;" 
-                class="rounded-circle" src="{{ avatar }}">
-            <div class="media-body">
-                <h2 style="font-size: 2.5rem">{{ current_user.user_name }}</h2>
-                <p class="text-secondary">{{ current_user.email }}</p>
+    <body>
+        {% block content %}
+            <div class="profile-cover">
+                <p><center>Profile cover here</center></p>
             </div>
-        </div>
 
-        <form method="POST" action="" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-
-            <fieldset class="form-group">
-                <legend style="font-size: 2.5rem;" class="border-bottom mb-4">Account Info</legend>
-                <div class="form-group">
-                    {{ form.user_name.label(class="form-control-label") }}
-
-                    {% if form.user_name.errors %}
-                        {{ form.user_name(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.user_name.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.user_name(class="form-control form-control-lg") }}
-                    {% endif %}
+            <div class="user-details">
+                <img src="{{ avatar }}" alt="Avatar" class="user-profile-image">
+                <div>
+                    <p class="user-profile-name">{{ current_user.user_name }}</h1>
+                    <p class="user-profile-subscriber"> 1.2M Subscribers </p>
                 </div>
-
-                <div class="form-group">
-                    {{ form.email.label(class="form-control-label") }}
-                    {% if form.email.errors %}
-                        {{ form.email(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.email.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.email(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    {{ form.avatar.label() }}
-                    {{ form.avatar(class="form-control-file") }}
-                    {% if form.avatar.errors %}
-                        {% for error in form.avatar.errors %}
-                            <span class="text-danger">{{ error }}</span></br>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                
-            </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
             </div>
-        </form>
-    </div>
-    <div>
-        {% for video in videos %}
-            <div style="display: flex; flex-direction:row; flex-wrap: wrap; width: 360px; ">
-                <article class="media content-section">
-                    <img style="height: 65px; width: 65px; margin-right: 16px;" class="rounded-circle"
-                        src="{{ url_for('static', filename='avatar/' + video.author.avatar) }}">
-                    <div class="media-body">
-                        <div class="article-metadata">
-                            <a class="mr-2" href="{{ url_for('account')}}">{{ video.author.user_name }}</a>
-                            <small class="text-muted">{{ video.upload_time.strftime('%Y-%m-%d') }}</small>
+
+            <div class="update-account-form">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+
+                    <fieldset class="form-group">
+                        <legend style="font-size: 2.5rem;" class="border-bottom mb-4">Account Info</legend>
+                        <div class="form-group">
+                            {{ form.user_name.label(class="form-control-label") }}
+
+                            {% if form.user_name.errors %}
+                                {{ form.user_name(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.user_name.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.user_name(class="form-control form-control-lg") }}
+                            {% endif %}
                         </div>
-                        <h5><a class="article-title" href="{{ url_for('video', id=video.id) }}">{{ video.video_title }}</a></h5>
-                        <video width="360" height="200" controls>
+
+                        <div class="form-group">
+                            {{ form.email.label(class="form-control-label") }}
+                            {% if form.email.errors %}
+                                {{ form.email(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.email(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.avatar.label() }}
+                            {{ form.avatar(class="form-control-file") }}
+                            {% if form.avatar.errors %}
+                                {% for error in form.avatar.errors %}
+                                    <span class="text-danger">{{ error }}</span></br>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        
+                    </fieldset>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </form>
+            </div>
+
+            <div class="account-page-videos">
+                {% for video in videos %}
+                    <div class="account-video-box">
+                        <video class="account-video-view" controls>
                             <source src="{{ url_for('static', filename='videos/' + video.video_content) }}" type="video/mp4">
                         </video>
+                       
+                        <a class="account-video-title" href="{{ url_for('video', id=video.id) }}">
+                            {{ video.video_title }}
+                        </a>
+                        <br>
+                        <a class="account-video-user-name" href="{{ url_for('account')}}">
+                            {{ video.author.user_name }}
+                        </a>
+                      
+                        <div class="account-video-tail-details">
+                            <span class="account-video-views"> 286,000 views </span>
+                            <span class="account-video-time">•{{ video.upload_time.strftime('%Y-%m-%d') }}</span>
+                        </div>
                     </div>
-                </article>
+                {% endfor %}
             </div>
-        {% endfor %}
-    </div>
-{% endblock content %}
+        {% endblock content %}
+    </body>
+</html>

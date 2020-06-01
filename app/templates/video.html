@@ -1,19 +1,32 @@
-{% extends "layout.html" %}
-{% block content %}
-<div style="display: flex; flex-direction:row; flex-wrap: wrap; width: 1280; "></div>
-    <article class="media content-section">
-        <img style="height: 65px; width: 65px; margin-right: 16px;" class="rounded-circle"
-            src="{{ url_for('static', filename='avatar/' + video.author.avatar) }}">
-        <div class="media-body">
-            <div class="article-metadata">
-                <a class="mr-2" href="{{ url_for('account')}}">{{ video.author.user_name }}</a>
-                <small class="text-muted">{{ video.upload_time.strftime('%Y-%m-%d') }}</small>
+<html>
+    <head>
+        {% extends "layout.html" %}
+    </head>
+
+    <body>
+        {% block content %}
+            <div>
+                <video class="video-view" controls>
+                    <source src="{{ url_for('static', filename='videos/' + video.video_content) }}" type="video/mp4">
+                </video>
             </div>
-            <h5><a class="article-title" href="{{ url_for('video', id=video.id) }}">{{ video.video_title }}</a></h5>
-            <video width="1280" height="720" controls>
-                <source src="{{ url_for('static', filename='videos/' + video.video_content) }}" type="video/mp4">
-            </video>
-        </div>
-    </article>
-</div>
-{% endblock content %}
+            <p class="video-view-title">{{ video.video_title }}</p>
+            <div class="video-view-tail-details">
+                <span class="video-view-views"> 286,000 views </span>
+                <span class="video-view-time">•{{ video.upload_time.strftime('%Y-%m-%d') }}</span>
+            </div>
+
+            <hr style="width: 1280px; margin-left: 2%;">
+            
+            <div class="video-view-user-details">
+                <img src="{{ url_for('static', filename='avatar/' + video.author.avatar) }}" alt="Avatar" class="video-view-user-image">
+                <div>
+                    <a class="video-view-user-name" href="{{ url_for('account')}}">{{ video.author.user_name }}</a>
+                    <p class="video-view-subscriber"> 1.2M Subscribers </p>
+                </div>
+            </div>
+
+            <div class="video-view-description"> {{video.description}} </div>
+        {% endblock content %}
+    </body>
+</html>
