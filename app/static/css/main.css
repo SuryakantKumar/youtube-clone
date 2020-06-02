@@ -2,7 +2,7 @@
 .navigation-bar{
     font-family: Arial, Helvetica, sans-serif;
     height: 56px;
-    background-color: white;
+    background-color: whitesmoke;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -297,7 +297,7 @@
     margin-top:0px;
 }
 
-.account-video-user-name{
+.account-video-user-name:hover{
     text-decoration: none;
     color: grey;
 }
@@ -354,3 +354,20 @@
   .delete-video-button {
       margin-left: 10px;
   }
+
+/* ------------------------------------Video comments----------------------------- */
+
+.video-comments-count{
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 2%;
+    color: black;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.comment-body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 2%;
+    width: 75%;
+    margin-top: 2%;
+}

@@ -71,3 +71,8 @@ class UpdateVideoForm(FlaskForm):
     description = TextField('Description', validators=[DataRequired()])
     category = StringField('Category', validators=[DataRequired(), Length(max=20)])
     submit = SubmitField('Update')
+
+
+class CommentForm(FlaskForm):
+    body = StringField('', validators=[DataRequired(), Length(max=400)]) 
+    submit = SubmitField('Comment Here')

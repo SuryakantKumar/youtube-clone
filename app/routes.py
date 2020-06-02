@@ -2,8 +2,8 @@ import os
 import secrets
 from PIL import Image
 from app import app, db
-from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, VideoUploadForm, UpdateVideoForm
-from app.models import User, Video
+from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, VideoUploadForm, UpdateVideoForm, CommentForm
+from app.models import User, Video, Comments
 from flask import render_template, url_for, flash, redirect, request, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.urls import url_parse
@@ -61,10 +61,18 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route("/video/<int:id>")
+@app.route("/video/<int:id>", methods=['GET', 'POST'])
 def video(id):
     video = Video.query.get_or_404(id)
-    return render_template('video.html', title=video.video_title, video=video)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comments(body=form.body.data, video=video, author=current_user._get_current_object()) 
+        db.session.add(comment)
+        db.session.commit()
+        return redirect(url_for('video', id=video.id))
+    
+    comments = video.comments.order_by(Comments.comment_time.desc())
+    return render_template('video.html', title=video.video_title, form=form, video=video, comments=comments)
 
 
 def save_avatar(form_picture):
@@ -140,6 +148,8 @@ def upload():
 @app.route('/video/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update_video(id):
+    """Function to update video contents"""
+
     video = Video.query.get_or_404(id)
     if video.author != current_user:
         abort(403)

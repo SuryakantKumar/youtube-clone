@@ -16,6 +16,7 @@ class User(UserMixin, db.Model):
     register_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     videos = db.relationship('Video', backref='author', lazy='dynamic')
+    comments = db.relationship('Comments', backref='author', lazy='dynamic')
 
     def __repr__(self):
         return f"User('{self.user_name}', '{self.email}')"
@@ -47,7 +48,10 @@ class Video(db.Model):
     views_count = db.Column(db.Integer, nullable=False, default=0)
     upload_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     likes_count = db.Column(db.Integer, nullable=False, default=0)
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    comments = db.relationship('Comments', backref='video', lazy='dynamic')
 
     def __repr__(self):
         return f"Video('{self.video_title}', '{self.upload_time}')"
@@ -55,21 +59,18 @@ class Video(db.Model):
 
 class Likes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    like = db.Column(db.Integer, nullable=False, default = 0)
-    like_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     video_id = db.Column(db.Integer, db.ForeignKey('video.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    def __repr__(self):
-        return f"Video('{self.video_id}', '{self.user_id}', {self.like})"
 
 
 class Comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    comment = db.Column(db.Text, nullable=False)
-    comment_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    video_id = db.Column(db.Integer, db.ForeignKey('video.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    body = db.Column(db.Text)
+    comment_time = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    video_id = db.Column(db.Integer, db.ForeignKey('video.id'))
 
     def __repr__(self):
-        return f"Video('{self.user_id}', '{self.comment}', {self.video_id})"
+        return f"Comments('{self.author_id}', '{self.body}', {self.video_id})"
+        
