@@ -13,10 +13,13 @@ class User(UserMixin, db.Model):
     cover_pic = db.Column(db.String(20), nullable=False, default='cover.png')
     age = db.Column(db.Integer, nullable=False)
     address = db.Column(db.Text, nullable=False)
-    register_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    register_date = db.Column(
+        db.DateTime, nullable=False, default=datetime.utcnow)
 
     videos = db.relationship('Video', backref='author', lazy='dynamic')
     comments = db.relationship('Comments', backref='author', lazy='dynamic')
+    liked = db.relationship(
+        'Likes', foreign_keys='Likes.user_id', backref='user', lazy='dynamic')
 
     def __repr__(self):
         return f"User('{self.user_name}', '{self.email}')"
@@ -30,6 +33,18 @@ class User(UserMixin, db.Model):
         '''Checking the password filled with the password in database'''
 
         return check_password_hash(self.password_hash, password)
+
+    def like_video(self, video):
+        if not self.has_liked_video(video):
+            like = Likes(user_id=self.id, video_id=video.id)
+            db.session.add(like)
+
+    def unlike_video(self, video):
+        if self.has_liked_video(video):
+            Likes.query.filter_by(user_id=self.id, video_id=video.id).delete()
+
+    def has_liked_video(self, video):
+        return Likes.query.filter(Likes.user_id == self.id, Likes.video_id == video.id).count() > 0
 
 
 @login.user_loader
@@ -46,12 +61,14 @@ class Video(db.Model):
     description = db.Column(db.Text, nullable=False)
     category = db.Column(db.String, nullable=False)
     views_count = db.Column(db.Integer, nullable=False, default=0)
-    upload_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    upload_time = db.Column(db.DateTime, nullable=False,
+                            default=datetime.utcnow)
     likes_count = db.Column(db.Integer, nullable=False, default=0)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     comments = db.relationship('Comments', backref='video', lazy='dynamic')
+    likes = db.relationship('Likes', backref='video', lazy='dynamic')
 
     def __repr__(self):
         return f"Video('{self.video_title}', '{self.upload_time}')"
@@ -73,4 +90,3 @@ class Comments(db.Model):
 
     def __repr__(self):
         return f"Comments('{self.author_id}', '{self.body}', {self.video_id})"
-        

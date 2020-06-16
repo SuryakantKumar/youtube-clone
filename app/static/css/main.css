@@ -161,6 +161,30 @@
     margin-left: 2%;
     max-width: 1280px;
 }
+.like-anonymous{
+    text-decoration: none;
+    color: black;
+    margin-left: 39vw;
+}
+
+.like-unlike-auth-user{
+    text-decoration: none;
+    color: black;
+    margin-left: 0.5vw;
+}
+
+.like-button:hover{
+    text-decoration: none;
+    color:black;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.unlike-button:hover{
+    color:black;
+    text-decoration: none;
+    font-weight: bold;
+}
 
 /* ----------------------------home page video view-------------------- */
 
@@ -344,15 +368,15 @@
   .blue-button:hover {
     text-decoration: none;
     background-color: #008CBA;
-    color: white;
+    color: black;
   }
 
   .update-video-button{
-      margin-left: 900px;
+      margin-left: 2vw;
   }
 
   .delete-video-button {
-      margin-left: 10px;
+      margin-left: 0.5vw;
   }
 
 /* ------------------------------------Video comments----------------------------- */

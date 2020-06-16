@@ -1,74 +1,74 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <div style="width:30%; margin-left: 35%; margin-top: 5%;">
-    <div>
-      <form method="POST" action="" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
+<div style="width:30%; margin-left: 35%; margin-top: 5%;">
+  <div>
+    <form method="POST" action="" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
 
-        <fieldset class='form-group'>
-          <legend style="text-align:center;" class='border-bottom mb-4 bg-danger'> {{legend}} </legend>
+      <fieldset class='form-group'>
+        <legend style="text-align:center;" class='border-bottom mb-4 bg-danger'> {{legend}} </legend>
 
-          <div class='form-group'>
-            {{ form.video_title.label(class='form-control-label') }}
-            
-            {% if form.video_title.errors %}
-              {{ form.video_title(class='form-control form-control-lg is-invalid') }}
-              <div class="invalid-feedback">
-                {% for error in form.video_title.errors %}
-                  <span> {{ error }} </span>
-                {% endfor %}
-              </div>
-            {% else %}
-              {{ form.video_title(class='form-control form-control-lg') }}
-            {% endif %}
+        <div class='form-group'>
+          {{ form.video_title.label(class='form-control-label') }}
+
+          {% if form.video_title.errors %}
+          {{ form.video_title(class='form-control form-control-lg is-invalid') }}
+          <div class="invalid-feedback">
+            {% for error in form.video_title.errors %}
+            <span> {{ error }} </span>
+            {% endfor %}
           </div>
+          {% else %}
+          {{ form.video_title(class='form-control form-control-lg') }}
+          {% endif %}
+        </div>
 
-          <div class='form-group'>
-            {{ form.description.label(class='form-control-label') }}
+        <div class='form-group'>
+          {{ form.description.label(class='form-control-label') }}
 
-            {% if form.description.errors %}
-              {{ form.description(class='form-control form-control-lg is-invalid') }}
-              <div class="invalid-feedback">
-                {% for error in form.description.errors %}
-                  <span> {{ error }} </span>
-                {% endfor %}
-              </div>
-            {% else %}
-              {{ form.description(class='form-control form-control-lg') }}
-            {% endif %}
+          {% if form.description.errors %}
+          {{ form.description(class='form-control form-control-lg is-invalid') }}
+          <div class="invalid-feedback">
+            {% for error in form.description.errors %}
+            <span> {{ error }} </span>
+            {% endfor %}
           </div>
+          {% else %}
+          {{ form.description(class='form-control form-control-lg') }}
+          {% endif %}
+        </div>
 
-          <div class='form-group'>
-            {{ form.category.label(class='form-control-label') }}
+        <div class='form-group'>
+          {{ form.category.label(class='form-control-label') }}
 
-            {% if form.category.errors %}
-              {{ form.category(class='form-control form-control-lg is-invalid') }}
-              <div class="invalid-feedback">
-                {% for error in form.category.errors %}
-                  <span> {{ error }} </span>
-                {% endfor %}
-              </div>
-            {% else %}
-              {{ form.category(class='form-control form-control-lg') }}
-            {% endif %}
+          {% if form.category.errors %}
+          {{ form.category(class='form-control form-control-lg is-invalid') }}
+          <div class="invalid-feedback">
+            {% for error in form.category.errors %}
+            <span> {{ error }} </span>
+            {% endfor %}
           </div>
+          {% else %}
+          {{ form.category(class='form-control form-control-lg') }}
+          {% endif %}
+        </div>
 
-          <div class="form-group">
-            {{ form.video_content.label() }}
-            {{ form.video_content(class="form-control-file") }}
-            {% if form.video_content.errors %}
-                {% for error in form.video_content.errors %}
-                    <span class="text-danger">{{ error }}</span></br>
-                {% endfor %}
-            {% endif %}
+        <div class="form-group">
+          {{ form.video_content.label() }}
+          {{ form.video_content(class="form-control-file") }}
+          {% if form.video_content.errors %}
+          {% for error in form.video_content.errors %}
+          <span class="text-danger">{{ error }}</span></br>
+          {% endfor %}
+          {% endif %}
         </div>
 
         <div class='form-group'>
           {{ form.submit(class='btn btn-outline-info') }}
         </div>
-      </form>
-    </div>
-    
+    </form>
   </div>
+
+</div>
 {% endblock %}

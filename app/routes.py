@@ -3,10 +3,11 @@ import secrets
 from PIL import Image
 from app import app, db
 from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, VideoUploadForm, UpdateVideoForm, CommentForm
-from app.models import User, Video, Comments
+from app.models import User, Video, Comments, Likes
 from flask import render_template, url_for, flash, redirect, request, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.urls import url_parse
+
 
 @app.route('/')
 @app.route('/home')
@@ -24,7 +25,8 @@ def register():
         return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(user_name=form.user_name.data, email=form.email.data, age=form.age.data, address=form.address.data)
+        user = User(user_name=form.user_name.data, email=form.email.data,
+                    age=form.age.data, address=form.address.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -64,13 +66,18 @@ def logout():
 @app.route("/video/<int:id>", methods=['GET', 'POST'])
 def video(id):
     video = Video.query.get_or_404(id)
+
+    if request.method == 'GET':
+        video.views_count += 1
+        db.session.commit()
     form = CommentForm()
     if form.validate_on_submit():
-        comment = Comments(body=form.body.data, video=video, author=current_user._get_current_object()) 
+        comment = Comments(body=form.body.data, video=video,
+                           author=current_user._get_current_object())
         db.session.add(comment)
         db.session.commit()
         return redirect(url_for('video', id=video.id))
-    
+
     comments = video.comments.order_by(Comments.comment_time.desc())
     return render_template('video.html', title=video.video_title, form=form, video=video, comments=comments)
 
@@ -130,18 +137,18 @@ def save_video(form_video):
 @login_required
 def upload():
     """Video Upload Page view"""
-    
+
     form = VideoUploadForm()
 
     if form.validate_on_submit():
         video_file = save_video(form.video_content.data)
         video = Video(video_title=form.video_title.data, video_content=video_file,
-            description=form.description.data, category=form.category.data, author=current_user)
+                      description=form.description.data, category=form.category.data, author=current_user)
         db.session.add(video)
         db.session.commit()
         flash('Your Video has been posted!', 'success')
         return redirect(url_for('home'))
-    
+
     return render_template('upload.html', title='Upload Video', form=form, legend='Upload Your Video')
 
 
@@ -167,3 +174,16 @@ def update_video(id):
         form.description.data = video.description
         form.category.data = video.category
     return render_template('update_video.html', title='Update Video', form=form, legend='Update video')
+
+
+@app.route('/like/<int:video_id>/<action>')
+@login_required
+def like_action(video_id, action):
+    video = Video.query.filter_by(id=video_id).first_or_404()
+    if action == 'like':
+        current_user.like_video(video)
+        db.session.commit()
+    if action == 'unlike':
+        current_user.unlike_video(video)
+        db.session.commit()
+    return redirect(request.referrer)

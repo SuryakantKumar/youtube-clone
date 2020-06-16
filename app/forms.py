@@ -7,12 +7,16 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Le
 
 
 class RegistrationForm(FlaskForm):
-    user_name = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    user_name = StringField('Username', validators=[
+                            DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=8), EqualTo('password')])
+    password = PasswordField('Password', validators=[
+                             DataRequired(), Length(min=8)])
+    confirm_password = PasswordField('Confirm Password', validators=[
+                                     DataRequired(), Length(min=8), EqualTo('password')])
     age = IntegerField('Age', validators=[DataRequired()])
-    address = TextField('Address', validators=[DataRequired(), Length(min=4, max=40)])
+    address = TextField('Address', validators=[
+                        DataRequired(), Length(min=4, max=40)])
     submit = SubmitField('Sign Up')
 
     def validate_username(self, user_name):
@@ -29,17 +33,21 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different email address.')
 
+
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
+    password = PasswordField('Password', validators=[
+                             DataRequired(), Length(min=8)])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
 
 class UpdateAccountForm(FlaskForm):
-    user_name = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    user_name = StringField('Username', validators=[
+                            DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    avatar = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    avatar = FileField('Update Profile Picture', validators=[
+                       FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Update')
 
     def validate_username(self, user_name):
@@ -56,23 +64,28 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user is not None:
                 raise ValidationError('Please use a different email address.')
-    
+
 
 class VideoUploadForm(FlaskForm):
-    video_title = TextField('Title', validators=[DataRequired(), Length(max=60)])
+    video_title = TextField('Title', validators=[
+                            DataRequired(), Length(max=60)])
     description = TextField('Description', validators=[DataRequired()])
-    category = StringField('Category', validators=[DataRequired(), Length(max=20)])
-    video_content = FileField('Video', validators=[FileAllowed(['mp4', 'mkv', '3gp', 'mov']), FileRequired()])
+    category = StringField('Category', validators=[
+                           DataRequired(), Length(max=20)])
+    video_content = FileField('Video', validators=[FileAllowed(
+        ['mp4', 'mkv', '3gp', 'mov']), FileRequired()])
     submit = SubmitField('Upload')
 
 
 class UpdateVideoForm(FlaskForm):
-    video_title = TextField('Title', validators=[DataRequired(), Length(max=60)])
+    video_title = TextField('Title', validators=[
+                            DataRequired(), Length(max=60)])
     description = TextField('Description', validators=[DataRequired()])
-    category = StringField('Category', validators=[DataRequired(), Length(max=20)])
+    category = StringField('Category', validators=[
+                           DataRequired(), Length(max=20)])
     submit = SubmitField('Update')
 
 
 class CommentForm(FlaskForm):
-    body = StringField('', validators=[DataRequired(), Length(max=400)]) 
+    body = StringField('', validators=[DataRequired(), Length(max=400)])
     submit = SubmitField('Comment Here')
